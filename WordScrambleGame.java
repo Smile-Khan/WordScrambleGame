@@ -9,54 +9,66 @@ public class WordScrambleGame {
         "bitcoin", "operation"
     };
 
-    // Function to scramble the letters of a word
-    public static String scrambleWord(String word) {
+     public static String scrambleWord(String word) {
+        /** Scramble the letters of a word randomly */
         List<Character> characters = new ArrayList<>();
-        
-        // Convert word to a list of characters
-        for (char ch : word.toCharArray()) {
-            characters.add(ch);
+        for (char c : word.toCharArray()) {
+            characters.add(c);
         }
-
-        // Shuffle the characters
         Collections.shuffle(characters);
-
-        // Join all characters to form a scrambled word
         StringBuilder scrambled = new StringBuilder();
-        for (char ch : characters) {
-            scrambled.append(ch);
+        for (char c : characters) {
+            scrambled.append(c);
         }
-
         return scrambled.toString();
     }
 
-    // Function to run the game
     public static void playGame() {
+        Scanner scanner = new Scanner(System.in);
         Random random = new Random();
+        
+        while (true) {  
+            String originalWord = WORD_LIST[random.nextInt(WORD_LIST.length)];
+            String scrambled = scrambleWord(originalWord);
+            
+            System.out.println("\nWelcome to the Word Scramble Game!");
+            System.out.println("Scrambled word: " + scrambled);
 
-        // Pick a random word from the list
-        String originalWord = WORD_LIST[random.nextInt(WORD_LIST.length)];
+            int attempts = 3;
 
-        // Scramble it
-        String scrambled = scrambleWord(originalWord);
+            while (attempts > 0) {
+                System.out.print("Guess the word (or type 'exit' to quit): ");
+                String guess = scanner.nextLine().toLowerCase();
 
-        // Print instructions
-        System.out.println("\n🔠 Welcome to the Word Scramble Game! 🔠");
-        System.out.println("Scrambled word: " + scrambled);
+                if (guess.equals("exit")) {
+                    System.out.println("Thanks for playing! Goodbye!");
+                    return;  
+                }
 
-        // Optional: let user guess (for fun)
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Guess the word: ");
-        String guess = sc.nextLine();
+                if (guess.equals(originalWord)) {
+                    System.out.println("Correct! You guessed it!\n");
+                    break;  
+                } else {
+                    attempts--;
+                    System.out.println("Wrong guess. Attempts left: " + attempts);
+                }
+            }
 
-        if (guess.equalsIgnoreCase(originalWord)) {
-            System.out.println("🎉 Correct! The word was: " + originalWord);
-        } else {
-            System.out.println("❌ Wrong! The correct word was: " + originalWord);
+            System.out.println("The correct word was: " + originalWord + "\n");
+
+            // Ask the player if they want to play again
+            // Get user input
+            // Check if they want to continue
+            System.out.println("Do you want to play again? (yes/no): ");
+            String playAgain = scanner.nextLine().trim().toLowerCase();
+            if(!playAgain.equals("yes"))
+            {
+                System.out.println("Thanks for playing! Goodbye!");
+                break;
+            }
         }
     }
 
-    // Main method
     public static void main(String[] args) {
         playGame();
     }
